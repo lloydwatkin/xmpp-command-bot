@@ -5,7 +5,7 @@ __Note: Not currently working, development in progress.__
 
 An XMPP bot which takes messages from a chat room or a prescribed set of users and runs commands on the local server.
 
-Build status: TBA
+Build status: [![Build Status](https://travis-ci.org/lloydwatkin/xmpp-command-bot.svg?branch=master)](https://travis-ci.org/lloydwatkin/xmpp-command-bot)
 
 # Setup
 
