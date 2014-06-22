@@ -21,5 +21,17 @@ describe('Xmpp', function() {
             }
         })
         
+        it('Uses a different error after connecting', function(done) {
+            var xmpp = null
+            try {
+                xmpp = new Xmpp({ xmpp: { connection: {} } })
+                xmpp.getClient().emit('online')
+                xmpp.getClient().emit('error', 'could not connect')
+            } catch (e) {
+                e.message.should.equal(xmpp.SERVER_WENT_AWAY)
+                done()
+            }
+        })
+        
     })
 })
