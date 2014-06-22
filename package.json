@@ -1,0 +1,27 @@
+{
+  "name": "xmpp-command-bot",
+  "version": "0.0.0",
+  "description": "An XMPP chat bot for running local commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lloydwatkin/xmpp-command-bot.git"
+  },
+  "keywords": [
+    "xmpp",
+    "command",
+    "bot"
+  ],
+  "author": "Lloyd Watkin <lloyd@evilprofessor.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lloydwatkin/xmpp-command-bot/issues"
+  },
+  "homepage": "https://github.com/lloydwatkin/xmpp-command-bot",
+  "dependencies": {
+    "node-xmpp-client": "^1.0.0-alpha2"
+  }
+}
