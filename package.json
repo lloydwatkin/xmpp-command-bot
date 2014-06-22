@@ -23,12 +23,11 @@
   "homepage": "https://github.com/lloydwatkin/xmpp-command-bot",
   "dependencies": {
     "node-xmpp-client": "^1.0.0-alpha2",
-    "colours": "^0.6.0-2",
+    "node-xmpp-core": "^1.0.0-alpha3",
     "debug": "^1.0.2"
   },
   "devDependencies": {
     "node-xmpp-server": "^1.0.0-alpha3",
-    "node-xmpp-core": "^1.0.0-alpha3",
     "mocha": "^1.20.1",
     "grunt": "^0.4.5",
     "grunt-mocha-cli": "^1.9.0",

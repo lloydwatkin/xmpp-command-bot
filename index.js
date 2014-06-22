@@ -6,7 +6,6 @@ if ('testing' === process.env.NODE_ENV)
     
 var config = require(configFile)
   , Xmpp = require('./lib/xmpp')
-require('colours')
 
 if (config.xmpp) {
     var xmpp = new Xmpp(config)
