@@ -262,4 +262,90 @@ describe('Xmpp', function() {
         })
         
     })
+    
+    describe('Muc messages', function() {
+        
+        var Commander = function() {}
+        Commander.prototype.handle = function(command) {
+            this.lastCommand = command
+        }
+        Commander.prototype.getLastCommand = function() {
+            return this.lastCommand
+        }
+        
+        var Xmpp = proxyquire(
+            '../../lib/xmpp',
+            {
+                'node-xmpp-client': Events,
+                './commander': Commander
+            }
+        )
+        
+        var chatMessage = ltx.parse(
+            '<chat from="lloyd@localhost/laptop" type="chat">' +
+            '<body>uptime</body>' +
+            '</chat>'
+        )
+      
+        it('Accepts message from directly allowed user', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        'lloyd@localhost'
+                    ]
+                } 
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand().should.equal('uptime')
+            done()
+        })
+      
+        it.skip('Accepts message from regex matched user', function() {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        'lloyd@localhost'
+                    ]
+                } 
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('error', 'could not connect')
+        })
+    
+        it.skip('Accepts message from function matched user', function() {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        'lloyd@localhost'
+                    ]
+                } 
+            })
+            xmpp.getClient().emit('online')
+        })
+        
+        it.skip('Errors to disallowed user', function() {
+            
+        })
+        
+        it.skip('Sends response', function() {
+            
+        })
+        
+    })
+    
+    describe('Chat message', function() {
+        
+        it.skip('Sends response to groupchat message', function() {
+            
+        })
+        
+        it.skip('Sends response to private message', function() {
+            
+        })
+        
+    })
 })
