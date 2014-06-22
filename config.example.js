@@ -1,8 +1,11 @@
 module.exports = {
-    connection: {
-        jid: 'lloyd@localhost',
-        password: 'password',
-        port: 5555
+    
+    xmpp: {
+        connection: {
+            jid: 'lloyd@localhost',
+            password: 'password',
+            port: 5555
+        }
     },
     
     commands: {

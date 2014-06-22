@@ -1,7 +1,6 @@
 'use strict';
 
 var xmpp = require('node-xmpp-server').C2SServer
-  , ltx = require('node-xmpp-core').ltx
 
 var runTests = function() {
 
