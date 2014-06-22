@@ -32,3 +32,7 @@ TBA
 ```
 npm test
 ```
+
+# Licence 
+
+MIT
