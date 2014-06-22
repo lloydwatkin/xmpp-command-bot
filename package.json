@@ -4,7 +4,7 @@
   "description": "An XMPP chat bot for running local commands",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "NODE_ENV=testing grunt test"
   },
   "repository": {
     "type": "git",
