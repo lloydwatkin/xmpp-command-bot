@@ -52,7 +52,13 @@ describe('Xmpp', function() {
            '<error by="coven@chat.shakespeare.lit" type="modify">' +
             '<jid-malformed xmlns="urn:ietf:params:xml:ns:xmpp-stanzas"/>' +
             '</error></presence>') 
-      
+
+        var botLeave = ltx.parse('<presence ' +
+           'from="chat@localhost" ' +
+           'id="273hs51g" ' +
+           'to="hag66@shakespeare.lit/pda" ' +
+           'type="unavailable"/>') 
+        
         it('Errors if no room provided', function(done) {
             var xmpp = null
             try {
@@ -221,6 +227,39 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().emit('online')
         })
-                
+        
+        
+        it('Errors when bot leaves room', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'chat',
+                        server: 'localhost',
+                        nick: 'commander',
+                        password: 'letmein'
+                    }
+                }
+            })
+            var sendError = function() {
+                try {
+                    xmpp.getClient().emit('stanza', botLeave)
+                } catch (e) {
+                    e.message.should.containEql(xmpp.MUC_BOT_LEFT)
+                    done()
+                }
+            }
+            xmpp.getClient().on('send', function(stanza) {
+                stanza.is('presence').should.be.true
+                stanza.attrs.to
+                    .should.equal('chat@localhost/commander')
+                stanza.getChild('x', xmpp.NS_MUC)
+                    .getChildText('password')
+                    .should.equal('letmein')
+                sendError()
+            })
+            xmpp.getClient().emit('online')
+        })
+        
     })
 })
