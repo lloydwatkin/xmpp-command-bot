@@ -3,8 +3,7 @@
 var proxyquire = require('proxyquire')
   , Events = require('events').EventEmitter
   , ltx = require('node-xmpp-core').ltx
-
-require('should')
+  , should = require('should')
 
 Events.prototype.send = function(stanza) {
     this.emit('send', stanza.root())
@@ -263,11 +262,12 @@ describe('Xmpp', function() {
         
     })
     
-    describe('Muc messages', function() {
+    describe('Chat messages', function() {
         
         var Commander = function() {}
-        Commander.prototype.handle = function(command) {
+        Commander.prototype.handle = function(command, callback) {
             this.lastCommand = command
+            callback('Server has been up a long time')
         }
         Commander.prototype.getLastCommand = function() {
             return this.lastCommand
@@ -281,11 +281,15 @@ describe('Xmpp', function() {
             }
         )
         
-        var chatMessage = ltx.parse(
-            '<chat from="lloyd@localhost/laptop" type="chat">' +
-            '<body>uptime</body>' +
-            '</chat>'
-        )
+        var chatMessage = null
+        
+        beforeEach(function() {
+            chatMessage = ltx.parse(
+                '<chat from="lloyd@localhost/laptop" type="chat">' +
+                '<body>uptime</body>' +
+                '</chat>'
+            )
+        })
       
         it('Accepts message from directly allowed user', function(done) {
             var xmpp = new Xmpp({
@@ -302,37 +306,92 @@ describe('Xmpp', function() {
             done()
         })
       
-        it.skip('Accepts message from regex matched user', function() {
+        it('Accepts message from regex matched user', function(done) {
             var xmpp = new Xmpp({
                 xmpp: {
                     connection: {},
                     admins: [
-                        'lloyd@localhost'
+                        'fail@localhost',
+                        /lloyd.*/
                     ]
                 } 
             })
             xmpp.getClient().emit('online')
-            xmpp.getClient().emit('error', 'could not connect')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand()
+                .should.equal('uptime')
+            done()
         })
     
-        it.skip('Accepts message from function matched user', function() {
+        it('Accepts message from function matched user', function(done) {
             var xmpp = new Xmpp({
                 xmpp: {
                     connection: {},
                     admins: [
-                        'lloyd@localhost'
+                        'fail@localhost',
+                        /lloyd@[^localhost]/,
+                        function(stanza, context) {
+                            stanza.should.exist
+                            context.should.exist
+                            return true
+                        }
                     ]
                 } 
             })
             xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand()
+                .should.equal('uptime')
+            done()
         })
         
-        it.skip('Errors to disallowed user', function() {
-            
+        it('Errors to disallowed user', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        function() {
+                            return false
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().on('send', function(stanza) {
+                stanza.is('chat').should.be.true
+                stanza.attrs.to
+                    .should.equal('lloyd@localhost/laptop')
+                stanza.getChildText('body')
+                    .should.equal(xmpp.PERMISSION_DENIED)
+                done()  
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            var lastCommand = xmpp.getCommander().getLastCommand()
+            should.not.exist(lastCommand)
         })
         
-        it.skip('Sends response', function() {
-            
+        it('Sends response', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().on('send', function(stanza) {
+                stanza.is('chat').should.be.true
+                stanza.attrs.to.toString()
+                    .should.equal('lloyd@localhost/laptop')
+                stanza.getChildText('body')
+                    .should.equal('Server has been up a long time')
+                done()  
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand().should.equal('uptime')
         })
         
     })
