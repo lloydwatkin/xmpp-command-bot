@@ -9,7 +9,22 @@ Events.prototype.send = function(stanza) {
     this.emit('send', stanza.root())
 }
 
-var Xmpp = proxyquire('../../lib/xmpp', { 'node-xmpp-client': Events })
+var Commander = function() {}
+Commander.prototype.handle = function(command, callback) {
+    this.lastCommand = command
+    callback('Server has been up a long time')
+}
+Commander.prototype.getLastCommand = function() {
+    return this.lastCommand
+}
+
+var Xmpp = proxyquire(
+    '../../lib/xmpp',
+    {
+        'node-xmpp-client': Events,
+        './commander': Commander
+    }
+)
 
 /*jshint -W030 */
 describe('Xmpp', function() {
@@ -263,24 +278,7 @@ describe('Xmpp', function() {
     })
     
     describe('Chat messages', function() {
-        
-        var Commander = function() {}
-        Commander.prototype.handle = function(command, callback) {
-            this.lastCommand = command
-            callback('Server has been up a long time')
-        }
-        Commander.prototype.getLastCommand = function() {
-            return this.lastCommand
-        }
-        
-        var Xmpp = proxyquire(
-            '../../lib/xmpp',
-            {
-                'node-xmpp-client': Events,
-                './commander': Commander
-            }
-        )
-        
+            
         var chatMessage = null
         
         beforeEach(function() {
@@ -397,24 +395,7 @@ describe('Xmpp', function() {
     })
     
     describe('Chat message', function() {
-        
-        var Commander = function() {}
-        Commander.prototype.handle = function(command, callback) {
-            this.lastCommand = command
-            callback('Server has been up a long time')
-        }
-        Commander.prototype.getLastCommand = function() {
-            return this.lastCommand
-        }
-        
-        var Xmpp = proxyquire(
-            '../../lib/xmpp',
-            {
-                'node-xmpp-client': Events,
-                './commander': Commander
-            }
-        )
-        
+
         it('Sends response to groupchat message', function(done) {
             var chatMessage = ltx.parse(
                 '<chat from="room@localhost/user" type="groupchat">' +
