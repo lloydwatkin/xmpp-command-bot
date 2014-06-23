@@ -398,12 +398,121 @@ describe('Xmpp', function() {
     
     describe('Chat message', function() {
         
-        it.skip('Sends response to groupchat message', function() {
-            
+        var Commander = function() {}
+        Commander.prototype.handle = function(command, callback) {
+            this.lastCommand = command
+            callback('Server has been up a long time')
+        }
+        Commander.prototype.getLastCommand = function() {
+            return this.lastCommand
+        }
+        
+        var Xmpp = proxyquire(
+            '../../lib/xmpp',
+            {
+                'node-xmpp-client': Events,
+                './commander': Commander
+            }
+        )
+        
+        it('Sends response to groupchat message', function(done) {
+            var chatMessage = ltx.parse(
+                '<chat from="room@localhost/user" type="groupchat">' +
+                '<body>bot: uptime</body>' +
+                '</chat>'
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'room',
+                        server: 'localhost',
+                        nick: 'bot'
+                    },
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().on('send', function(stanza) {
+                if (stanza.is('presence')) return
+                stanza.is('chat').should.be.true
+                stanza.attrs.to.toString()
+                    .should.equal('room@localhost')
+                stanza.attrs.type.should.equal('groupchat')
+                stanza.getChildText('body')
+                    .should.equal('Server has been up a long time')
+                done()  
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand().should.equal('uptime')
         })
         
-        it.skip('Sends response to private message', function() {
-            
+        it('Sends response to private message', function(done) {
+            var chatMessage = ltx.parse(
+                '<chat from="room@localhost/user" type="chat">' +
+                '<body>bot: uptime</body>' +
+                '</chat>'
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'room',
+                        server: 'localhost',
+                        nick: 'bot'
+                    },
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().on('send', function(stanza) {
+                if (stanza.is('presence')) return
+                stanza.is('chat').should.be.true
+                stanza.attrs.to.toString()
+                    .should.equal('room@localhost/user')
+                stanza.attrs.type.should.equal('chat')
+                stanza.getChildText('body')
+                    .should.equal('Server has been up a long time')
+                done()  
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            xmpp.getCommander().getLastCommand().should.equal('uptime')
+        })
+        
+        it('Does not respond to messages not for it', function(done) {
+            var chatMessage = ltx.parse(
+                '<chat from="room@localhost/user" type="chat">' +
+                '<body>uptime</body>' +
+                '</chat>'
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'room',
+                        server: 'localhost',
+                        nick: 'bot'
+                    },
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            var lastCommand = xmpp.getCommander().getLastCommand()
+            should.not.exist(lastCommand)
+            done()
         })
         
     })
