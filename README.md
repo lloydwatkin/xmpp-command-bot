@@ -33,6 +33,17 @@ TBA
 npm test
 ```
 
+## Debugging
+
+```
+DEBUG=* node index
+```
+
+Various values for debug can be used, currently the following are supported:
+
+- xmpp
+- commander
+
 # Licence 
 
 MIT
