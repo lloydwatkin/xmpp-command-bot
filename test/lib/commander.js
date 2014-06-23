@@ -1,6 +1,7 @@
 'use strict';
 
 var proxyquire = require('proxyquire')
+  , should = require('should')
 
 var config = {
     'with-reply': {
@@ -16,21 +17,52 @@ var config = {
     },
     'regex arguments': {
         command: 'regex-arguments',
-        arguments: /[a-z0-9]*/i,
+        arguments: /^[a-z0-9]*$/i,
         summary: 'egex arguments summary'
     },
     'function arguments': {
         command: 'function-arguments',
+        arguments: function() {
+            return false   
+        },
+        summary: 'function arguments summary',
+        options: { timeout: 2000 }
+    },
+    'passing function arguments': {
+        command: 'passing-function-arguments',
         arguments: function(args) {
+            args.should.equal('ok?')
+            args = 'this is a string'
             return args   
         },
-        summary: 'function arguments summary'
+        reply: true,
+        summary: 'function arguments summary',
+        options: { timeout: 2000 }
+    },
+    'killed': {
+        command: 'killed',
+        summary: 'Killed summary',
+        reply: true
+    },
+    'error': {
+        command: 'error',
+        summary: 'Will error',
+        reply: true
+    }
+}
 
-    }
-    }
 var childProcess = {
     exec: function(command, options, callback) {
         /* error, stdout, stderr */
+        if ('killed' === command) {
+            return callback({ signal: 'SIGTERM' })   
+        }
+        if ('error' === command) {
+            return callback(null, null, config[command].command)
+        }
+        if (-1 !== command.indexOf('passing function arguments')) {
+            return callback(null, command)
+        }
         callback(null, config[command].command)
     }
 }
@@ -96,17 +128,55 @@ describe('Commander', function() {
                 done()
             })
         })
-        
-        it.skip('Should run command and return error', function() {
-            
+
+        it('Should run command with error return', function(done) {
+            commander.handle('error', function(message) {
+                message.should.equal(
+                    commander.ERROR + config.error.command
+                )  
+                done()
+            })
         })
         
-        it.skip('Should run command without return', function() {
-            
+        it('Should run command and report killed', function(done) {
+            commander.handle('killed', function(message) {
+                message.should.equal(
+                    commander.STOPPED + ' SIGTERM'
+                )  
+                done()
+            })
         })
         
-        it.skip('Should reject command with bad arguments', function() {
-            
+        it('Should run command without return', function(done) {
+            commander.handle('blanket arguments', function(message) {
+                should.not.exist(message) 
+                done()
+            })
+        })
+        
+        it('Should reject command with bad regex arguments', function(done) {
+            commander.handle('regex arguments hell-o', function(message) {
+                message.should.equal(commander.BAD_ARGUMENTS)
+                done()
+            })
+        })
+        
+        it('Should reject command with bad function arguments', function(done) {
+            commander.handle('function arguments', function(message) {
+                message.should.equal(commander.BAD_ARGUMENTS)
+                done()
+            })
+        })
+        
+        it('Allows functional argument matching to rewrite arguments', function(done) {
+            commander.handle('passing function arguments ok?', function(message) {
+                message.should.equal(
+                    commander.SUCCESS +
+                    'passing function arguments' +
+                    ' this is a string'
+                )
+                done()
+            })
         })
         
     })
