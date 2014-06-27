@@ -54,6 +54,20 @@ describe('Xmpp', function() {
             }
         })
         
+        it('Sends presence after connecting', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {}
+                }
+            })
+            xmpp.getClient().on('send', function(stanza) {
+                stanza.is('presence').should.be.true
+                stanza.getChildText('show').should.equal('chat')
+                done()
+            })
+            xmpp.getClient().emit('online')
+        })
+        
     })
     
     describe('Joining MUC', function() {
@@ -143,9 +157,8 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 stanza.is('presence').should.be.true
-                stanza.attrs.to
-                    .should.equal('chat@localhost/commander')
-                 done()
+                if (stanza.attrs.to !== 'chat@localhost/commander')  return
+                done()
             })
             xmpp.getClient().emit('online')
         })
@@ -164,8 +177,7 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 stanza.is('presence').should.be.true
-                stanza.attrs.to
-                    .should.equal('chat@localhost/commander')
+                if (stanza.attrs.to !== 'chat@localhost/commander') return
                 stanza.getChild('x', xmpp.NS_MUC)
                     .getChildText('password')
                     .should.equal('letmein')
@@ -197,8 +209,7 @@ describe('Xmpp', function() {
             }
             xmpp.getClient().on('send', function(stanza) {
                 stanza.is('presence').should.be.true
-                stanza.attrs.to
-                    .should.equal('chat@localhost/commander')
+                if (stanza.attrs.to !== 'chat@localhost/commander') return
                 stanza.getChild('x', xmpp.NS_MUC)
                     .getChildText('password')
                     .should.equal('letmein')
@@ -232,6 +243,7 @@ describe('Xmpp', function() {
             }
             xmpp.getClient().on('send', function(stanza) {
                 stanza.is('presence').should.be.true
+                if (stanza.attrs.to !== 'chat@localhost/commander') return
                 stanza.attrs.to
                     .should.equal('chat@localhost/commander')
                 stanza.getChild('x', xmpp.NS_MUC)
@@ -265,8 +277,7 @@ describe('Xmpp', function() {
             }
             xmpp.getClient().on('send', function(stanza) {
                 stanza.is('presence').should.be.true
-                stanza.attrs.to
-                    .should.equal('chat@localhost/commander')
+                if (stanza.attrs.to !== 'chat@localhost/commander') return
                 stanza.getChild('x', xmpp.NS_MUC)
                     .getChildText('password')
                     .should.equal('letmein')
@@ -355,6 +366,7 @@ describe('Xmpp', function() {
                 } 
             })
             xmpp.getClient().on('send', function(stanza) {
+                if (stanza.is('presence')) return
                 stanza.is('chat').should.be.true
                 stanza.attrs.to
                     .should.equal('lloyd@localhost/laptop')
@@ -380,6 +392,7 @@ describe('Xmpp', function() {
                 } 
             })
             xmpp.getClient().on('send', function(stanza) {
+                if (stanza.is('presence')) return
                 stanza.is('chat').should.be.true
                 stanza.attrs.to.toString()
                     .should.equal('lloyd@localhost/laptop')
