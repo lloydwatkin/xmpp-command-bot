@@ -1,6 +1,6 @@
 {
   "name": "xmpp-command-bot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An XMPP chat bot for running local commands",
   "main": "index.js",
   "scripts": {
