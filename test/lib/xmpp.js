@@ -510,4 +510,27 @@ describe('Xmpp', function() {
         })
         
     })
+    
+    describe('Presence subscriptions', function() {
+    
+        it('Automatically agrees to presence subscription requests', function(done) {
+            var subscriptionRequest = ltx.parse(
+                '<presence from="test@localhost/laptop" type="subscribe" />'   
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {}
+                } 
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().on('send', function(stanza) {
+                if (!stanza.is('presence')) return
+                if (stanza.attrs.type !== 'subscribed') return
+                stanza.attrs.to.should.equal('test@localhost')
+                done()  
+            })
+            xmpp.getClient().emit('stanza', subscriptionRequest)
+        })
+        
+    })
 })
