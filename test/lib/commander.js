@@ -18,7 +18,7 @@ var config = {
     'regex arguments': {
         command: 'regex-arguments',
         arguments: /^[a-z0-9]*$/i,
-        summary: 'egex arguments summary'
+        summary: 'regex arguments summary'
     },
     'function arguments': {
         command: 'function-arguments',
@@ -93,8 +93,12 @@ describe('Commander', function() {
     
     describe('Help', function() {
     
-        it.skip('Should return help if asked to', function() {
-            
+        it('Should return help if asked to', function(done) {
+            var commander = new Commander(config)
+            commander.handle('help', function(response) {
+                response.split('\n').length.should.equal(18)
+                done()
+            })
         })
         
         it.skip('Should return detailed help if available', function() {
