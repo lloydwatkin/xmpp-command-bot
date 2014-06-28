@@ -27,6 +27,16 @@ TBA
 
 TBA
 
+# Upstart script
+
+There is an upstart script located in `contrib/xmpp-command-bot.conf`. Copy this to `/etc/init/` then run:
+
+```
+sudo service xmpp-command-bot start
+```
+
+The script is set up to run out of `/usr/share/xmpp-command-bot` and as the user `xmpp`.
+
 # Testing 
 
 ```
