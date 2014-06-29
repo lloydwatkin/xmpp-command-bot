@@ -67,6 +67,12 @@ The original stanza is passed to your provided function, return true or false in
 
 By providing details under the `muc` key. The minimum keys are '__room__', '__server__', and '__nick__' (nickname).  If the room is password protected then adding the password to the '__password__' key will allo you to connect.
 
+In MUC rooms the bot can be talked as follows:
+
+```
+bot-nick: do_stuff
+```
+
 ## Adding commands
 
 TBA
