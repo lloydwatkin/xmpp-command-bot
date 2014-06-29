@@ -13,13 +13,57 @@ Copy `config.example.js` to `config.js` and modify as required.
 
 ## XMPP Connection
 
-TBA
+An example XMPP configuration object is as follows:
 
-## Setting allowed users
+```javascript
+{
+    xmpp: {
+        connection: {
+            jid: 'bot@localhost',
+            password: 'mysecretpassword'
+        },
+        muc: {
+            room: 'chat',
+            server: 'localhost',
+            nick: 'commander',
+            password: 'letmein'
+        },
+        admins: [
+            'fail@localhost',
+            /lloyd@[^localhost]/,
+            function(stanza, context) {
+                return true
+            }
+        ]
+    }
+}
+```
 
-TBA
+The connection key contains details for the bot to connect to the XMPP server. These values are passed directly to the constructor of the [node-xmpp-client](http://node-xmpp.github.io/doc/nodexmppclient.html). For more connection choices please see the linked manual.
 
-## Connecting to a chat room
+### Setting allowed users
+
+Using the `admin` key within `xmpp` section of the configuration to set what XMPP JIDs can make requests to the chat bot. There are three methods by which you can define allowed JIDs:
+
+- bare JID match
+- regular expression match
+- function match
+
+The admin matching methods are called in order, if any of the methods provide a match then the command will be accepted.
+
+#### Bare JID match
+
+The bare JID of the sender is compared to the provided values.
+
+#### Regular Expression match
+
+The bare JID of the sender is compared to the provided value using a regular expression match.
+
+#### Function match
+
+The original stanza is passed to your provided function, return true or false in order tell the bot whether to accept this request.
+
+### Connecting to a chat room
 
 TBA
 
