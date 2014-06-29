@@ -101,16 +101,30 @@ describe('Commander', function() {
             })
         })
         
-        it.skip('Should return detailed help if available', function() {
-            
+        it('Should return detailed help if available', function(done) {
+            var commander = new Commander(config)
+            commander.handle('help with-reply', function(response) {
+                response.indexOf(config['with-reply'].description)
+                    .should.not.equal(-1)
+                done()
+            })
         })
         
-        it.skip('Should return summary if detailed message not available', function() {
-            
+        it('Should return summary if detailed message not available', function(done) {
+            var commander = new Commander(config)
+            commander.handle('help blanket arguments', function(response) {
+                response.indexOf(config['blanket arguments'].summary)
+                    .should.not.equal(-1)
+                done()
+            })
         })
         
-        it.skip('Should return error message if command does not exist', function() {
-            
+        it('Should return error message if command does not exist', function(done) {
+            var commander = new Commander(config)
+            commander.handle('help doesnt-exist', function(response) {
+                response.should.equal(commander.HELP_COMMAND_NOT_FOUND)
+                done()
+            })            
         })
         
     })
