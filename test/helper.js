@@ -4,7 +4,6 @@ var xmpp = require('node-xmpp-server').C2SServer
 
 var runTests = function() {
 
-    console.log('running tests')
     require('../index')
     
 }
