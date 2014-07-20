@@ -533,4 +533,41 @@ describe('Xmpp', function() {
         })
         
     })
+    
+    describe('MUC role restrictions', function() {
+      
+        it('Ignores message from user without appropriate role', function(done) {
+            var chatMessage = ltx.parse(
+                '<chat from="room@localhost/user" type="groupchat">' +
+                '<body>bot: uptime</body>' +
+                '</chat>'
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'room',
+                        server: 'localhost',
+                        nick: 'bot',
+                        roles: [ 'admin', 'moderator' ]
+                    },
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            var lastCommand = xmpp.getCommander().getLastCommand()
+            should.not.exist(lastCommand)
+            done()                  
+        })
+        
+        it.skip('Accepts a message for an allowed user', function() {
+            
+        })
+        
+    })
 })
