@@ -75,7 +75,49 @@ bot-nick: do_stuff
 
 ## Adding commands
 
-TBA
+```
+{
+    commands: {
+        'cat': {
+            command: 'cat',
+            reply: true,
+            summary: 'Cat a file',
+            description: 'Return the contents of a file'
+            arguments: /^[a-z0-9]*$/i,
+            options: { timeout: 2000 }
+        }
+    }
+}
+```
+
+Using the `commands` key of the bot configuration allows you to set up commands.  It takes the form of a keyed object with the key being the command identifier.
+
+## Command (required)
+
+The command to be run
+
+## Reply
+
+If set to false then the command is run without any response returned.
+
+## Summary (required)
+
+A summary of the command being run - included in the help response.
+
+## Description
+
+A longer description of the command being run.
+
+## Arguments
+
+If arguments are accepted for the command then they can be expected here:
+
+* false: Arguments aren't accepted
+* true: Blanket accept arguments - be very careful using this
+* regex: Match arguments using a regular expression
+* function: Passed the arguments object. Return false for 'failed to match' and return the processed arguments if provided arguments are ok
+
+## Options
 
 # Upstart script
 
