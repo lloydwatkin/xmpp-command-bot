@@ -565,8 +565,41 @@ describe('Xmpp', function() {
             done()                  
         })
         
-        it.skip('Accepts a message for an allowed user', function() {
-            
+        it('Accepts a message for an allowed user', function(done) {
+            var chatMessage = ltx.parse(
+                '<chat from="room@localhost/user" type="groupchat">' +
+                '<body>bot: uptime</body>' +
+                '</chat>'
+            )
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    muc: {
+                        room: 'room',
+                        server: 'localhost',
+                        nick: 'bot',
+                        roles: [ 'admin', 'moderator' ]
+                    },
+                    admins: [
+                        function() {
+                            return true
+                        }
+                    ]
+                } 
+            })
+            var presence = ltx.parse(
+                '<presence from="room@localhost/user">' +
+                '<x xmlns="' + xmpp.NS_MUC_USER + '">' +
+                '<item role="admin"/>' +
+                '</x>' +
+                '</presence>'
+            )
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', presence)
+            xmpp.getClient().emit('stanza', chatMessage)
+            var lastCommand = xmpp.getCommander().getLastCommand()
+            lastCommand.should.equal('uptime')
+            done() 
         })
         
     })
