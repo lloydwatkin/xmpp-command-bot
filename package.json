@@ -24,7 +24,7 @@
   "dependencies": {
     "node-xmpp-client": "^1.0.0-alpha2",
     "node-xmpp-core": "^1.0.0-alpha3",
-    "debug": "^1.0.2"
+    "debug": "^1.0.4"
   },
   "devDependencies": {
     "node-xmpp-server": "^1.0.0-alpha3",
