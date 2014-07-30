@@ -294,9 +294,9 @@ describe('Xmpp', function() {
         
         beforeEach(function() {
             chatMessage = ltx.parse(
-                '<chat from="lloyd@localhost/laptop" type="chat">' +
+                '<message from="lloyd@localhost/laptop" type="chat">' +
                 '<body>uptime</body>' +
-                '</chat>'
+                '</message>'
             )
         })
       
@@ -367,7 +367,7 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 if (stanza.is('presence')) return
-                stanza.is('chat').should.be.true
+                stanza.is('message').should.be.true
                 stanza.attrs.to
                     .should.equal('lloyd@localhost/laptop')
                 stanza.getChildText('body')
@@ -393,7 +393,7 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 if (stanza.is('presence')) return
-                stanza.is('chat').should.be.true
+                stanza.is('message').should.be.true
                 stanza.attrs.to.toString()
                     .should.equal('lloyd@localhost/laptop')
                 stanza.getChildText('body')
@@ -411,9 +411,9 @@ describe('Xmpp', function() {
 
         it('Sends response to groupchat message', function(done) {
             var chatMessage = ltx.parse(
-                '<chat from="room@localhost/user" type="groupchat">' +
+                '<message from="room@localhost/user" type="groupchat">' +
                 '<body>bot: uptime</body>' +
-                '</chat>'
+                '</message>'
             )
             var xmpp = new Xmpp({
                 xmpp: {
@@ -432,7 +432,7 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 if (stanza.is('presence')) return
-                stanza.is('chat').should.be.true
+                stanza.is('message').should.be.true
                 stanza.attrs.to.toString()
                     .should.equal('room@localhost')
                 stanza.attrs.type.should.equal('groupchat')
@@ -447,9 +447,9 @@ describe('Xmpp', function() {
         
         it('Sends response to private message', function(done) {
             var chatMessage = ltx.parse(
-                '<chat from="room@localhost/user" type="chat">' +
+                '<message from="room@localhost/user" type="chat">' +
                 '<body>bot: uptime</body>' +
-                '</chat>'
+                '</message>'
             )
             var xmpp = new Xmpp({
                 xmpp: {
@@ -468,7 +468,7 @@ describe('Xmpp', function() {
             })
             xmpp.getClient().on('send', function(stanza) {
                 if (stanza.is('presence')) return
-                stanza.is('chat').should.be.true
+                stanza.is('message').should.be.true
                 stanza.attrs.to.toString()
                     .should.equal('room@localhost/user')
                 stanza.attrs.type.should.equal('chat')
@@ -483,9 +483,9 @@ describe('Xmpp', function() {
         
         it('Does not respond to messages not for it', function(done) {
             var chatMessage = ltx.parse(
-                '<chat from="room@localhost/user" type="chat">' +
+                '<message from="room@localhost/user" type="chat">' +
                 '<body>uptime</body>' +
-                '</chat>'
+                '</message>'
             )
             var xmpp = new Xmpp({
                 xmpp: {
@@ -538,9 +538,9 @@ describe('Xmpp', function() {
       
         it('Ignores message from user without appropriate role', function(done) {
             var chatMessage = ltx.parse(
-                '<chat from="room@localhost/user" type="groupchat">' +
+                '<message from="room@localhost/user" type="groupchat">' +
                 '<body>bot: uptime</body>' +
-                '</chat>'
+                '</message>'
             )
             var xmpp = new Xmpp({
                 xmpp: {
@@ -567,9 +567,9 @@ describe('Xmpp', function() {
         
         it('Accepts a message for an allowed user', function(done) {
             var chatMessage = ltx.parse(
-                '<chat from="room@localhost/user" type="groupchat">' +
+                '<message from="room@localhost/user" type="groupchat">' +
                 '<body>bot: uptime</body>' +
-                '</chat>'
+                '</message>'
             )
             var xmpp = new Xmpp({
                 xmpp: {
