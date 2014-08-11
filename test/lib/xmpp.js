@@ -603,4 +603,28 @@ describe('Xmpp', function() {
         })
         
     })
+
+    describe('Issues', function() {
+
+        it('Issue #18: Ignores chat state notifications', function(done) {
+            var xmpp = new Xmpp({
+                xmpp: {
+                    connection: {},
+                    admins: [
+                        'lloyd@localhost'
+                    ]
+                }
+            })
+            var chatMessage = ltx.parse(
+                '<message from="lloyd@localhost/laptop" type="chat">' +
+                '<composing xmlns="http://jabber.org/protocol/chatstates"/>' +
+                '</message>'
+            )
+            xmpp.getClient().emit('online')
+            xmpp.getClient().emit('stanza', chatMessage)
+            should.not.exist(xmpp.getCommander().getLastCommand())
+            done()
+        })
+
+    })
 })
