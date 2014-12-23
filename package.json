@@ -22,12 +22,14 @@
   },
   "homepage": "https://github.com/lloydwatkin/xmpp-command-bot",
   "dependencies": {
-    "node-xmpp-client": "^1.0.0-alpha2",
-    "node-xmpp-core": "^1.0.0-alpha3",
+    "node-xmpp-client": "^1.0.0-alpha19",
+    "node-xmpp-core": "^1.0.0-alpha13",
     "debug": "^1.0.4"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
+    "node-xmpp-server": "^1.0.0-alpha11",
+    "mocha": "^1.20.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.10.0",

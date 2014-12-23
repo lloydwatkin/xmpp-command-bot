@@ -5,6 +5,9 @@ An XMPP bot which takes messages from a chat room or a prescribed set of users a
 
 Build status: [![Build Status](https://travis-ci.org/lloydwatkin/xmpp-command-bot.svg?branch=master)](https://travis-ci.org/lloydwatkin/xmpp-command-bot)
 [![Coverage Status](https://img.shields.io/coveralls/lloydwatkin/xmpp-command-bot.svg)](https://coveralls.io/r/lloydwatkin/xmpp-command-bot)
+[![Dependency Status](https://david-dm.org/lloydwatkin/xmpp-command-bot.svg?style=flat)](https://david-dm.org/lloydwatkin/xmpp-command-bot)
+[![devDependency Status](https://david-dm.org/lloydwatkin/xmpp-command-bot/dev-status.svg?style=flat)](https://david-dm.org/lloydwatkin/xmpp-command-bot#info=devDependencies)
+[![Donate to help support development](http://img.shields.io/gratipay/_lloydwatkin.svg?style=flat)](https://www.gittip.com/lloydwatkin/)
 
 # Setup
 
