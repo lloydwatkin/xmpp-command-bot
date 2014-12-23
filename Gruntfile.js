@@ -47,8 +47,7 @@ module.exports = function(grunt) {
     // Load the plugins
     grunt.loadNpmTasks('grunt-contrib-jshint')
     grunt.loadNpmTasks('grunt-mocha-cli')
-    grunt.loadNpmTasks('grunt-istanbul')
-    grunt.loadNpmTasks('grunt-istanbul-coverage')
+
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls'])
     // Configure tasks
     grunt.registerTask('default', ['test'])
