@@ -1,11 +1,10 @@
 xmpp-command-bot
 ==================
 
-__Note: Not currently working, development in progress.__
-
 An XMPP bot which takes messages from a chat room or a prescribed set of users and runs commands on the local server.
 
 Build status: [![Build Status](https://travis-ci.org/lloydwatkin/xmpp-command-bot.svg?branch=master)](https://travis-ci.org/lloydwatkin/xmpp-command-bot)
+[![Coverage Status](https://img.shields.io/coveralls/lloydwatkin/xmpp-command-bot.svg)](https://coveralls.io/r/lloydwatkin/xmpp-command-bot)
 
 # Setup
 
