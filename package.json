@@ -1,6 +1,6 @@
 {
   "name": "xmpp-command-bot",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "An XMPP chat bot for running local commands",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
-    "node-xmpp-server": "^1.0.0-alpha11",
+    "node-xmpp-server": "^1.0.0-alpha3",
     "mocha": "^1.20.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
@@ -36,8 +36,6 @@
     "grunt-mocha-cli": "^1.9.0",
     "grunt-mocha-istanbul": "^2.2.0",
     "istanbul": "^0.3.5",
-    "mocha": "^1.20.1",
-    "node-xmpp-server": "^1.0.0-alpha3",
     "proxyquire": "^1.0.1",
     "should": "^4.0.4"
   }
